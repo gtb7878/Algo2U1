@@ -18,4 +18,11 @@ class MultiplicationMethod extends AbstractHashFunction
         bits = p;
         seed = s;
     }
+
+    @Override
+    public int compute(Object key)
+    {
+        int h = key.hashCode();
+        return h * seed >>> 32 - bits;
+    }
 }
