@@ -1,14 +1,18 @@
 // Implementierung von Streuwerttabellen mit offener Adressierung.
 class HashTableOpenAddressing implements HashTable
 {
-    private Element[][] tab;
+    private Element[] tab;
+    //private int[][] marker;
     private HashSequence seq;
     private int saved_i;
     // Streuwerttabelle mit Sondierungsfunktion s.
     public HashTableOpenAddressing (HashSequence s)
     {
         seq = s;
-        tab = new Element[s.size()][2];
+        tab = new Element[s.size()];
+        // [0] -> Löschmarkierung
+        // [1] -> vorhanden / nicht vorhanden
+        // marker = new int[s.size()][2];
     }
 
 
@@ -20,18 +24,18 @@ class HashTableOpenAddressing implements HashTable
 
         for (int j = 0; j < seq.size(); j++) // 1
         {
-            if (tab[i][0] == null) // 1.2
+            if (tab[i] == null) // 1.2
             {
                 if (saved_i != -1) return saved_i;
                 else return i;
             }
 
-            if (tab[i][1] != null && saved_i == -1) // 1.3
+            if (tab[i].getMarker() && saved_i == -1) // 1.3
             {
                 saved_i = i;
             }
 
-            if (tab[i][0] != null) return i; // 1.4
+            if (!tab[i].getMarker()) return i; // 1.4
 
             i = seq.next(); // 1.1
         }
@@ -46,7 +50,16 @@ class HashTableOpenAddressing implements HashTable
     @Override
     public boolean put(Object key, Object val)
     {
-        return false;
+        Element Elem = new Element(key, val);
+        int i = search(key);
+        // System.out.println("Index " + i + " Key " + key.toString());
+
+        if (i >= 0)
+        {
+            tab[i] = Elem;
+            return true;
+        }
+        else return false;
     }
 
     @Override
@@ -66,9 +79,9 @@ class HashTableOpenAddressing implements HashTable
     {
         for (int j = 0; j < seq.size(); j++)
         {
-            if (tab[j][0] != null)
+            if (tab[j] != null)
             {
-                System.out.println(j + " " + tab[j][0].getKey().toString() + " " + tab[j][0].getValue().toString());
+                System.out.println(j + " " + tab[j].getKey().toString() + " " + tab[j].getValue().toString());
             }
         }
     }
