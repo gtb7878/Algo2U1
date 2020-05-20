@@ -9,6 +9,6 @@ class DivisionMethod extends AbstractHashFunction {
     public int compute(Object key)
     {
         int h = key.hashCode();
-        return (h >= 0 ? h : -h) % this.size();
+        return (h >= 0 ? h : -h) % this.size;
     }
 }

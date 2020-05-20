@@ -16,6 +16,6 @@ class LinearProbing extends AbstractHashSequence
     @Override
     public int next()
     {
-        return prev = (prev + 1) % size();
+        return prev  = (prev + 1) % size();
     }
 }

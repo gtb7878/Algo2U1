@@ -22,6 +22,7 @@ class HashTableOpenAddressing implements HashTable
         saved_i = -1;
         int i = seq.first(key); // 1.1
 
+        //System.out.println("Key: " + key + " Index: " + i);
         for (int j = 0; j < seq.size(); j++) // 1
         {
             if (tab[i] == null) // 1.2
@@ -35,12 +36,18 @@ class HashTableOpenAddressing implements HashTable
                 saved_i = i;
             }
 
-            if (!tab[i].getMarker()) return i; // 1.4
+            if (!tab[i].getMarker() && tab[i].getKey().equals(key))
+            {
+                return i; // 1.4
+            }
 
             i = seq.next(); // 1.1
         }
 
-        if (saved_i != -1) return saved_i; // 2
+        if (saved_i != -1)
+        {
+            return saved_i; // 2
+        }
 
         return -1; // 3
     }
@@ -52,7 +59,6 @@ class HashTableOpenAddressing implements HashTable
     {
         Element Elem = new Element(key, val);
         int i = search(key);
-        // System.out.println("Index " + i + " Key " + key.toString());
 
         if (i >= 0)
         {
@@ -65,7 +71,9 @@ class HashTableOpenAddressing implements HashTable
     @Override
     public Object get(Object key)
     {
-        return null;
+        int i = search(key);
+        if (i >= 0 && tab[i] != null) return tab[i].getValue();
+        else return null;
     }
 
     @Override
@@ -79,7 +87,7 @@ class HashTableOpenAddressing implements HashTable
     {
         for (int j = 0; j < seq.size(); j++)
         {
-            if (tab[j] != null)
+            if (tab[j] != null && !tab[j].getMarker())
             {
                 System.out.println(j + " " + tab[j].getKey().toString() + " " + tab[j].getValue().toString());
             }

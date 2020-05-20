@@ -21,6 +21,6 @@ class MultiplicationMethod extends AbstractHashFunction
     public int compute(Object key)
     {
         int h = key.hashCode();
-        return h * seed >>> 32 - bits;
+        return (h * seed) >>> (32 - bits);
     }
 }
