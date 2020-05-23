@@ -79,7 +79,14 @@ class HashTableOpenAddressing implements HashTable
     @Override
     public boolean remove(Object key)
     {
-        return false;
+        int i = search(key);
+
+        if (i >= 0)
+        {
+            tab[i].setMarker(true);
+            return true;
+        }
+        else return false;
     }
 
     @Override
