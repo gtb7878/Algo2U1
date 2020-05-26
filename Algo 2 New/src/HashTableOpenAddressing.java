@@ -4,7 +4,7 @@ class HashTableOpenAddressing implements HashTable
     private Element[] tab;
     //private int[][] marker;
     private HashSequence seq;
-    private int saved_i;
+
     // Streuwerttabelle mit Sondierungsfunktion s.
     public HashTableOpenAddressing (HashSequence s)
     {
@@ -19,7 +19,7 @@ class HashTableOpenAddressing implements HashTable
     // siehe Folie 42 -> Hilfsoperation
     public int search(Object key)
     {
-        saved_i = -1;
+        int saved_i = -1;
         int i = seq.first(key); // 1.1
 
         //System.out.println("Key: " + key + " Index: " + i);
@@ -44,12 +44,8 @@ class HashTableOpenAddressing implements HashTable
             i = seq.next(); // 1.1
         }
 
-        if (saved_i != -1)
-        {
-            return saved_i; // 2
-        }
-
-        return -1; // 3
+        return saved_i; // 2
+// 3
     }
 
 
@@ -57,6 +53,7 @@ class HashTableOpenAddressing implements HashTable
     @Override
     public boolean put(Object key, Object val)
     {
+        if (key == null || val == null) return false;
         Element Elem = new Element(key, val);
         int i = search(key);
 
@@ -71,22 +68,27 @@ class HashTableOpenAddressing implements HashTable
     @Override
     public Object get(Object key)
     {
+        if (key == null) return null;
         int i = search(key);
-        if (i >= 0 && tab[i] != null) return tab[i].getValue();
+        if (i >= 0 && tab[i] != null && !tab[i].getMarker()) return tab[i].getValue();
         else return null;
     }
 
     @Override
     public boolean remove(Object key)
     {
+        if (key == null) return false;
         int i = search(key);
 
-        if (i >= 0)
+        if (i >= 0 && tab[i] != null)
         {
-            tab[i].setMarker(true);
-            return true;
+            if (!tab[i].getMarker())
+            {
+                tab[i].setMarker(true);
+                return true;
+            }
         }
-        else return false;
+        return false;
     }
 
     @Override
